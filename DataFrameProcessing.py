@@ -13,6 +13,7 @@ import pandas as pd
   Pandas DataFrame
   """
 def df_init(csv_path):
+
     try:
         df = pd.read_csv(csv_path, sep=';', engine='python')
         print('CSV loaded successfully.')
@@ -38,7 +39,8 @@ def df_init(csv_path):
   Pandas DataFrame
   """
 def df_processor(old_df):
-    new_df = pd.DataFrame(columns=['MeresID', 'Panel', 'Ido', 'Homerseklet'])
+
+    new_df = pd.DataFrame(columns=['Panel', 'Ido', 'Homerseklet'])
 
     for idx in range(len(old_df)):
         time_col = f'Panel hőfok {idx} [°C] Time'
@@ -46,10 +48,18 @@ def df_processor(old_df):
 
         if temp_col in old_df.columns and time_col in old_df.columns:
             temp_df = pd.DataFrame({
-                'MeresID': old_df.index + 1,
+                #'MeresID': old_df.index + 1,
                 'Panel': idx,
                 'Ido': old_df[time_col],
                 'Homerseklet': old_df[temp_col]
             })
             new_df = pd.concat([new_df, temp_df])
+
+    new_df['Panel'] = new_df['Panel'].astype(int)
+    new_df['Ido'] = new_df['Ido'].astype(str)
+    new_df['Homerseklet'] = new_df['Homerseklet'].str.replace(',','.').astype(float)
+
     return new_df
+
+def df_cleaner(old_df):
+    return
