@@ -62,4 +62,5 @@ def df_processor(old_df):
     return new_df
 
 def df_cleaner(old_df):
-    return
+    old_df['Ido'] = old_df['Ido'].str.replace('.','-')
+    print(old_df['Ido'])
