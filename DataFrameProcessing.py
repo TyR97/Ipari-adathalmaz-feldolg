@@ -1,3 +1,5 @@
+from logging import exception
+
 import pandas as pd
 
 """
@@ -13,13 +15,19 @@ import pandas as pd
   Pandas DataFrame
   """
 def df_init(csv_path):
-
-    try:
-        df = pd.read_csv(csv_path, sep=';', engine='python')
-        print('CSV loaded successfully.')
+    if csv_path == 'Hűtőpanelek.csv':
+        try:
+            df = pd.read_csv(csv_path, sep=';', engine='python')
+            print('CSV loaded successfully.')
+        except Exception as e:
+            print('CSV could not be loaded.')
         return df
-    except Exception as err:
-        print(err)
+    else:
+        try:
+            df = pd.read_csv(csv_path, sep=',', engine='python')
+        except Exception as e:
+            print('CSV could not be loaded.')
+        return df
 
 
 """
@@ -63,4 +71,7 @@ def df_processor(old_df):
 
 def df_cleaner(old_df):
     old_df['Ido'] = old_df['Ido'].str.replace('.','-')
-    print(old_df['Ido'])
+    #print(old_df['Ido'])
+
+def date_to_right_format(date):
+    return pd.to_datetime(date, dayfirst=True).dt.strftime('%Y-%m-%d')
