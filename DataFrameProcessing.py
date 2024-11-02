@@ -1,5 +1,3 @@
-from logging import exception
-
 import pandas as pd
 
 """
@@ -14,20 +12,26 @@ import pandas as pd
   -------
   Pandas DataFrame
   """
+
 def df_init(csv_path):
-    if csv_path == 'Hűtőpanelek.csv':
-        try:
-            df = pd.read_csv(csv_path, sep=';', engine='python')
-            print('CSV loaded successfully.')
-        except Exception as e:
-            print('CSV could not be loaded.')
-        return df
-    else:
-        try:
-            df = pd.read_csv(csv_path, sep=',', engine='python')
-        except Exception as e:
-            print('CSV could not be loaded.')
-        return df
+    with open(csv_path, 'r') as f:
+        line = f.readline()
+        if ';' in line:
+            try:
+                df = pd.read_csv(csv_path, sep=';', engine='python')
+                print('CSV loaded successfully.')
+            except Exception as e:
+                print('CSV could not be loaded.')
+            return df
+        elif ',' in line:
+            try:
+                df = pd.read_csv(csv_path, sep=',', engine='python')
+            except Exception as e:
+                print('CSV could not be loaded.')
+            return df
+        else:
+            raise ValueError('Unknown separator in file')
+
 
 
 """
@@ -71,7 +75,7 @@ def df_processor(old_df):
 
 def df_cleaner(old_df):
     old_df['Ido'] = old_df['Ido'].str.replace('.','-')
-    #print(old_df['Ido'])
 
 def date_to_right_format(date):
     return pd.to_datetime(date, dayfirst=True).dt.strftime('%Y-%m-%d')
+
