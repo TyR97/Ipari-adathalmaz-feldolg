@@ -70,12 +70,32 @@ def df_processor(old_df):
     new_df['Panel'] = new_df['Panel'].astype(int)
     new_df['Ido'] = new_df['Ido'].astype(str)
     new_df['Homerseklet'] = new_df['Homerseklet'].str.replace(',','.').astype(float)
-
     return new_df
+"""
+  Changes the . to - in the Ido column.
+  Makes sure that every timestamp has a leadingzero
+  Parameters
+  ----------
+  old_df : DataFrame
+      The DataFrame to modify
 
+  Returns
+  -------
+  """
 def df_cleaner(old_df):
     old_df['Ido'] = old_df['Ido'].str.replace('.','-')
+    old_df['Ido'] = pd.to_datetime(old_df['Ido'])
 
+"""
+  Makes sure that that date is in the YYYY-MM-DD format.
+  Parameters
+  ----------
+  old_df : DataFrame
+      The DataFrame to modify
+
+  Returns
+  -------
+  """
 def date_to_right_format(date):
     return pd.to_datetime(date, dayfirst=True).dt.strftime('%Y-%m-%d')
 
